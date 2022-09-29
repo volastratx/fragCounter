@@ -95,7 +95,8 @@ multicoco = function(cov, numlevs = 1, base = max(10, 1e5 / max(width(cov))),
       tmp.cov = tmp.cov %Q% (!is.na(reads))
       # tmp.cov = gr.val(tiles, cov, val = c('reads', 'gc', 'map'), na.rm = TRUE)
     } else {
-      tmp.cov = seg2gr(cov.dt[,list(chr = seqnames[1], start = min(start), end = max(end), strand = strand[1], reads = mean(reads, na.rm = T)), by = get(paste("lev", numlevs, sep = ''))][end>start, ], seqlengths = sl)
+      #tmp.cov = seg2gr(cov.dt[,list(chr = seqnames[1], start = min(start), end = max(end), strand = strand[1], reads = mean(reads, na.rm = T)), by = get(paste("lev", numlevs, sep = ''))][end>start, ], seqlengths = sl)
+      tmp.cov = seg2gr(cov.dt[,list(chr = seqnames[1], start = min(start), end = max(end), strand = strand[1], reads = mean(reads, na.rm = T)), by = list(get(paste("lev", numlevs, sep = '')))][end>start, ], seqlengths = sl)
     }
     ix = which(!is.na(values(tmp.cov)[, 'reads']))
     tmp = data.frame()
@@ -310,15 +311,16 @@ fragCounter = function(bam, skeleton, cov = NULL, midpoint = TRUE, window = 200,
     out.rds = paste(outdir, '/cov.rds', sep = '')
     out.corr = paste(gsub('.rds$', '', out.rds), '.corrected.bw', sep = '')
 ##    if (!is.null(tryCatch({library(rtracklayer); 'success'}, error = function(e) NULL))) { #' twalradt Wednesday, Jan 16, 2019 03:55:28 PM
-      cov.corr.out = cov
-      cov.corr.out$score = cov$reads.corrected
-      cov.corr.out$score[is.na(cov.corr.out$score)] = -1
-      cov.corr.out = cov.corr.out[width(cov.corr.out)==window] ## remove any funky widths at end of chromosome
-      if (exome == TRUE) {
-        export(cov.corr.out[, 'score'], out.corr, 'bigWig', dataFormat = 'variableStep')
-      } else {
-        export(cov.corr.out[, 'score'], out.corr, 'bigWig', dataFormat = 'fixedStep')
-      }
+      # big wig export error
+      #cov.corr.out = cov
+      #cov.corr.out$score = cov$reads.corrected
+      #cov.corr.out$score[is.na(cov.corr.out$score)] = -1
+      #cov.corr.out = cov.corr.out[width(cov.corr.out)==window] ## remove any funky widths at end of chromosome
+      #if (exome == TRUE) {
+      #  export(cov.corr.out[, 'score'], out.corr, 'bigWig', dataFormat = 'variableStep')
+      #} else {
+      #  export(cov.corr.out[, 'score'], out.corr, 'bigWig', dataFormat = 'fixedStep')
+      #}
 ##    } #' twalradt Wednesday, Jan 16, 2019 03:55:58 PM
     saveRDS(cov, paste(gsub('.rds$', '', out.rds), '.rds', sep = ''))
   }
@@ -717,7 +719,8 @@ coco = function(cov, base = max(10, 1e5 / max(width(cov))), fields = c("gc", "ma
       tmp.cov = tmp.cov %Q% (!is.na(reads))
       # tmp.cov = gr.val(tiles, cov, val = c('reads', 'gc', 'map'), na.rm = TRUE)
     } else {
-      tmp.cov = seg2gr(cov.dt[,list(chr = seqnames[1], start = min(start), end = max(end), strand = strand[1], reads = mean(reads, na.rm = T)), by = get(paste("lev", numlevs, sep = ''))][end>start, ], seqlengths = sl)
+      #tmp.cov = seg2gr(cov.dt[,list(chr = seqnames[1], start = min(start), end = max(end), strand = strand[1], reads = mean(reads, na.rm = T)), by = get(paste("lev", numlevs, sep = ''))][end>start, ], seqlengths = sl)
+      tmp.cov = seg2gr(cov.dt[,list(chr = seqnames[1], start = min(start), end = max(end), strand = strand[1], reads = mean(reads, na.rm = T)), by = list(get(paste("lev", numlevs, sep = '')))][end>start, ], seqlengths = sl)
     }
     ix = which(!is.na(values(tmp.cov)[, 'reads']))
     tmp = data.frame()
