@@ -636,6 +636,7 @@ correctcov_stub = function(cov.wig, mappability = 0.9, samplesize = 5e4, verbose
   gc.str = gr.string(gc)
   map.str = gr.string(map)
   cov.str = gr.string(cov)
+  cov.str = gsub("chr","",cov.str)
   all.str = intersect(intersect(map.str, cov.str), gc.str) ## in case we have mismatches in the ordering / genome definition       
   cat(sprintf('length cov is %s, length gc is %s, length map is %s\n',
               length(cov),
